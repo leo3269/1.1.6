@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Menu {
+    struct MenuItem {
+        string name;
+        uint price; // 价格以wei为单位
+        bool available; // 是否可用
+    }
+
+    mapping(uint => MenuItem) public menuItems; // 存储菜单项
+    uint public itemCount; // 菜单项计数
+
+    // 添加菜单项
+    function addMenuItem(string memory _name, uint _price) public {
+        itemCount++;
+        menuItems[itemCount] = MenuItem(_name, _price, true);
+    }
+
+    // 更新菜单项
+    function updateMenuItem(uint _itemId, string memory _name, uint _price, bool _available) public {
+        require(_itemId > 0 && _itemId <= itemCount, "菜单项不存在");
+        menuItems[_itemId] = MenuItem(_name, _price, _available);
+    }
+
+    // 获取菜单项
+    function getMenuItem(uint _itemId) public view returns (string memory, uint, bool) {
+        require(_itemId > 0 && _itemId <= itemCount, "菜单项不存在");
+        MenuItem memory item = menuItems[_itemId];
+        return (item.name, item.price, item.available);
+    }
+}
